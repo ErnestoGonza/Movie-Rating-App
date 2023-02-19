@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/ErnestoGonza/Movie-Rating-App#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mongoose": "^6.9.2"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",
