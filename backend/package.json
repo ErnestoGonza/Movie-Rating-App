@@ -1,0 +1,22 @@
+{
+  "name": "movie-rating-app",
+  "version": "1.0.0",
+  "description": "Movie-Rating-App",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErnestoGonza/Movie-Rating-App.git"
+  },
+  "author": "Ernesto Gonzalez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ErnestoGonza/Movie-Rating-App/issues"
+  },
+  "homepage": "https://github.com/ErnestoGonza/Movie-Rating-App#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
