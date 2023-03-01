@@ -6,7 +6,9 @@ require('./db');
 const PORT = process.env.PORT || 8001;
 const userRouter = require('./routes/user');
 
+//Creates Server
 const app = express();
+//Turns incoming JSON to JS
 app.use(express.json());
 
 app.use('/api/user', userRouter);
