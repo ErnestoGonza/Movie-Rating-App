@@ -4,7 +4,11 @@ const { userValidator, validate } = require('../middlewares/validator')
 
 const router = express.Router();
 
-router.post('/create', userValidator, validate, userController.createUser, (req, res) => {
+router.post('/create',
+  userValidator,
+  validate, 
+  userController.createUser, 
+  (req, res) => {
   res.status(201).json(res.locals.newUser);
 });
 

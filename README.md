@@ -1,3 +1,6 @@
 # Movie-Rating-App
 
-In progress...
+#To Start
+  - Run npm install
+  - create .env file:
+    - Currently needs PORT number and DB_URL
