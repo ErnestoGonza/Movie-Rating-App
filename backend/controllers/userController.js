@@ -23,4 +23,16 @@ userController.createUser = async (req, res, next) => {
   }
 };
 
+userController.signIn = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const existingEmail = await User.findOne({ email });
+  
+
+  if(!email || !existingEmail) return res.status(401).json({error: 'Invalid email!'});
+  if(!password) return res.status(401).json({error: 'Invalid password!'});
+
+  return next();
+}
+
 module.exports = userController;
