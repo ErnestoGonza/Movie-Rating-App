@@ -13,10 +13,12 @@ app.use(express.json());
 
 app.use('/api/user', userRouter);
 
+//Handles any route not found
 app.use('*', (req, res) => {
   res.status(400).json('Page Not Found!');
 });
 
+//Global Error Handler
 app.use((err, req, res, next) => {
   res
     .status(err.status || 500)
