@@ -1,4 +1,4 @@
-const mongoose = requier('mongoose');
+const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const emailVerificationTokenSchema = mongoose.Schema({
