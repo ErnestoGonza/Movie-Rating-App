@@ -3,7 +3,8 @@ const userController = require('../controllers/userController');
 const { userValidator, validate } = require('../middlewares/validator');
 const {
   emailVerificationToken,
-} = require('../middlewares/emailVerificationToken');
+  verifyEmail,
+} = require('../controllers/emailVerificationTokenController');
 
 const router = express.Router();
 
@@ -21,6 +22,10 @@ router.post(
     });
   }
 );
+
+router.post('/verify-email', verifyEmail, (req, res) => {
+  res.json({ message: 'Your email is verified.' });
+});
 
 router.post('/sign-in', userController.signIn, (req, res) => {
   res.status(200).json('Signed in!'); //Needs middleware to check email and pass
