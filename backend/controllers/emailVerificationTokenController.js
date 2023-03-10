@@ -37,7 +37,8 @@ const emailVerificationToken = async function (req, res, next) {
       status: 500,
       message: err,
       method: 'POST',
-      location: 'middlewares/emailVerificationToken',
+      location:
+        'controllers/emailVerificationTokenController/emailVerificationToken',
     });
   }
 };
@@ -59,30 +60,39 @@ const verifyEmail = async (req, res, next) => {
   const isMatched = await token.compareToken(OTP);
   if (!isMatched) return res.json({ error: 'Please submit a valid OTP!' });
 
-  user.isVerified = true;
-  await user.save();
+  try {
+    user.isVerified = true;
+    await user.save();
 
-  EmailVerificationToken.findByIdAndDelete(token._id);
+    EmailVerificationToken.findByIdAndDelete(token._id);
 
-  const transport = nodemailer.createTransport({
-    host: 'sandbox.smtp.mailtrap.io',
-    port: 2525,
-    auth: {
-      user: process.env.NODEMAILER_USER,
-      pass: process.env.NODEMAILER_PASS,
-    },
-  });
+    const transport = nodemailer.createTransport({
+      host: 'sandbox.smtp.mailtrap.io',
+      port: 2525,
+      auth: {
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASS,
+      },
+    });
 
-  transport.sendMail({
-    from: 'verification@reviewapp.com',
-    to: user.email,
-    subject: 'Welcome Email',
-    html: `
-            <h1>Welcome to our app ${user.name}! Thank you for choosing us.</h1>
-          `,
-  });
+    transport.sendMail({
+      from: 'verification@reviewapp.com',
+      to: user.email,
+      subject: 'Welcome Email',
+      html: `
+              <h1>Welcome to our app ${user.name}! Thank you for choosing us.</h1>
+            `,
+    });
 
-  return next();
+    return next();
+  } catch (err) {
+    return next({
+      status: 500,
+      message: err,
+      method: 'POST',
+      location: 'controllers/emailVerificationTokenController/verifyEmail',
+    });
+  }
 };
 
 const resendEmailVerificationToken = async (req, res, next) => {
@@ -131,7 +141,8 @@ const resendEmailVerificationToken = async (req, res, next) => {
       status: 500,
       message: err,
       method: 'POST',
-      location: 'middlewares/emailVerificationToken',
+      location:
+        'controllers/emailVerificationTokenControllers/resendEmailverificationToken',
     });
   }
 };
