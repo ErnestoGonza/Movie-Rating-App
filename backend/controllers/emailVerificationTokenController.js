@@ -85,7 +85,59 @@ const verifyEmail = async (req, res, next) => {
   return next();
 };
 
+const resendEmailVerificationToken = async (req, res, next) => {
+  const { userId } = req.body;
+
+  const user = await User.findById(userId);
+  if (!user) return res.status(401).json({ error: 'user not found!' });
+
+  if (user.isVerified)
+    return res.status(409).json({ error: 'This email is already verified!' });
+
+  await EmailVerificationToken.findOneAndDelete({
+    owner: userId,
+  });
+
+  try {
+    //creates random 6 digit string
+    let OTP = Math.floor(Math.random() * (1000000 - 100000)).toString();
+    await EmailVerificationToken.create({
+      owner: user._id,
+      token: OTP,
+    });
+
+    const transport = nodemailer.createTransport({
+      host: 'sandbox.smtp.mailtrap.io',
+      port: 2525,
+      auth: {
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASS,
+      },
+    });
+
+    transport.sendMail({
+      from: 'verification@reviewapp.com',
+      to: user.email,
+      subject: 'Email Verification',
+      html: `
+              <p>Your new verification OTP</p>
+              <h1>${OTP}</h1>
+            `,
+    });
+
+    return next();
+  } catch (err) {
+    return next({
+      status: 500,
+      message: err,
+      method: 'POST',
+      location: 'middlewares/emailVerificationToken',
+    });
+  }
+};
+
 module.exports = {
   emailVerificationToken,
   verifyEmail,
+  resendEmailVerificationToken,
 };

@@ -4,6 +4,7 @@ const { userValidator, validate } = require('../middlewares/validator');
 const {
   emailVerificationToken,
   verifyEmail,
+  resendEmailVerificationToken,
 } = require('../controllers/emailVerificationTokenController');
 
 const router = express.Router();
@@ -24,11 +25,21 @@ router.post(
 );
 
 router.post('/verify-email', verifyEmail, (req, res) => {
-  res.json({ message: 'Your email is verified.' });
+  res.status(201).json({ message: 'Your email is verified.' });
 });
 
+router.post(
+  '/resend-email-verification-token',
+  resendEmailVerificationToken,
+  (req, res) => {
+    res
+      .status(201)
+      .json({ message: 'Your new token has been sent to your email.' });
+  }
+);
+
 router.post('/sign-in', userController.signIn, (req, res) => {
-  res.status(200).json('Signed in!'); //Needs middleware to check email and pass
+  res.status(200).json('Signed in!');
 });
 
 module.exports = router;
