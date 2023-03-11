@@ -41,19 +41,21 @@ const verifyEmail = async (req, res, next) => {
 
   if (!isValidObjectId(userId))
     return res.status(401).json({ error: 'Invalid user!' });
-
-  const user = await User.findById(userId);
-  if (!user) return res.json({ error: 'user not found!' });
-
-  if (user.isVerified) return res.json({ error: 'user is alerady verified' });
-
-  const token = await EmailVerificationToken.findOne({ owner: userId });
-  if (!token) return res.json({ error: 'token not found!' });
-
-  const isMatched = await token.compareToken(OTP);
-  if (!isMatched) return res.json({ error: 'Please submit a valid OTP!' });
-
   try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: 'user not found!' });
+
+    if (user.isVerified)
+      return res.status(409).json({ error: 'user is alerady verified' });
+
+    const token = await EmailVerificationToken.findOne({ owner: userId });
+    if (!token)
+      return res.status(401).json({ error: 'token expired or was not found!' });
+
+    const isMatched = await token.compareToken(OTP);
+    if (!isMatched)
+      return res.status(401).json({ error: 'Please submit a valid OTP!' });
+
     user.isVerified = true;
     await user.save();
 
