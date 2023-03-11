@@ -105,7 +105,7 @@ const resendEmailVerificationToken = async (req, res, next) => {
     return res.status(409).json({ error: 'This email is already verified!' });
 
   await EmailVerificationToken.findOneAndDelete({
-    owner: userId,
+    owner: user._id,
   });
 
   try {
