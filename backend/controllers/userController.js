@@ -2,6 +2,17 @@ const User = require('../models/userSchema');
 
 const userController = {};
 
+/**
+ * 
+ * @param {HTTP request made by user} req
+ * @param {Response to be sent back to user} res
+ * @param {function to keep us going through the middleware chain} next
+ * @returns next function in our middleware chain
+ * 
+ * @remarks used in routes/user.js
+ * @type POST
+ */
+
 userController.createUser = async (req, res, next) => {
   const { name, email, password } = req.body;
 
@@ -23,6 +34,17 @@ userController.createUser = async (req, res, next) => {
     });
   }
 };
+
+/**
+ * 
+ * @param {HTTP request made by user} req
+ * @param {Response to be sent back to user} res
+ * @param {function to keep us going through the middleware chain} next
+ * @returns next function in our middleware chain
+ * 
+ * @remarks used in routes/user.js
+ * @type POST
+ */
 
 userController.signIn = async (req, res, next) => {
   const { email, password } = req.body;
