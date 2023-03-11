@@ -1,7 +1,6 @@
 const EmailVerificationToken = require('../models/emailVerificationToken');
 const User = require('../models/userSchema');
-const { createOTP } = require('../utils/mail');
-const nodemailer = require('nodemailer');
+const { createOTP, generateMailTransporter } = require('../utils/mail');
 const { isValidObjectId } = require('mongoose');
 
 const emailVerificationToken = async function (req, res, next) {
@@ -14,16 +13,7 @@ const emailVerificationToken = async function (req, res, next) {
       token: OTP,
     });
 
-    const transport = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
-      auth: {
-        user: process.env.NODEMAILER_USER,
-        pass: process.env.NODEMAILER_PASS,
-      },
-    });
-
-    transport.sendMail({
+    generateMailTransporter.sendMail({
       from: 'verification@reviewapp.com',
       to: res.locals.newUser.email,
       subject: 'Email Verification',
@@ -32,7 +22,7 @@ const emailVerificationToken = async function (req, res, next) {
             <h1>${OTP}</h1>
           `,
     });
-    
+
     res.locals.OTP = OTP;
     return next();
   } catch (err) {
@@ -69,16 +59,7 @@ const verifyEmail = async (req, res, next) => {
 
     EmailVerificationToken.findByIdAndDelete(token._id);
 
-    const transport = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
-      auth: {
-        user: process.env.NODEMAILER_USER,
-        pass: process.env.NODEMAILER_PASS,
-      },
-    });
-
-    transport.sendMail({
+    generateMailTransporter.sendMail({
       from: 'verification@reviewapp.com',
       to: user.email,
       subject: 'Welcome Email',
@@ -120,16 +101,7 @@ const resendEmailVerificationToken = async (req, res, next) => {
       token: OTP,
     });
 
-    const transport = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
-      auth: {
-        user: process.env.NODEMAILER_USER,
-        pass: process.env.NODEMAILER_PASS,
-      },
-    });
-
-    transport.sendMail({
+    generateMailTransporter.sendMail({
       from: 'verification@reviewapp.com',
       to: user.email,
       subject: 'Email Verification',

@@ -1,3 +1,5 @@
+const nodemailer = require('nodemailer');
+
 const emailUtils = {};
 
 emailUtils.createOTP = (otpLength = 6) => {
@@ -10,5 +12,14 @@ emailUtils.createOTP = (otpLength = 6) => {
 
   return OTP;
 };
+
+emailUtils.generateMailTransporter = nodemailer.createTransport({
+      host: 'sandbox.smtp.mailtrap.io',
+      port: 2525,
+      auth: {
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASS,
+      },
+    });
 
 module.exports = emailUtils;
