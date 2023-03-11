@@ -1,12 +1,14 @@
 const EmailVerificationToken = require('../models/emailVerificationToken');
 const User = require('../models/userSchema');
+const { createOTP } = require('../utils/mail');
 const nodemailer = require('nodemailer');
 const { isValidObjectId } = require('mongoose');
 
 const emailVerificationToken = async function (req, res, next) {
   try {
     //creates random 6 digit string
-    let OTP = Math.floor(Math.random() * (1000000 - 100000)).toString();
+    const OTP = createOTP();
+
     await EmailVerificationToken.create({
       owner: res.locals.newUser._id,
       token: OTP,
@@ -30,6 +32,7 @@ const emailVerificationToken = async function (req, res, next) {
             <h1>${OTP}</h1>
           `,
     });
+    
     res.locals.OTP = OTP;
     return next();
   } catch (err) {
@@ -110,7 +113,8 @@ const resendEmailVerificationToken = async (req, res, next) => {
 
   try {
     //creates random 6 digit string
-    let OTP = Math.floor(Math.random() * (1000000 - 100000)).toString();
+    const OTP = createOTP();
+
     await EmailVerificationToken.create({
       owner: user._id,
       token: OTP,
