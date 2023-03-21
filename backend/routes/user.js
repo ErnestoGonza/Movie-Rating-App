@@ -42,4 +42,10 @@ router.post('/sign-in', userController.signIn, (req, res) => {
   res.status(200).json('Signed in!');
 });
 
+router.post('/reset-password', userController.resetPassword, (req, res) => {
+  res
+    .status(200)
+    .json({ message: 'Your reset token has been sent to your email.' });
+});
+
 module.exports = router;
