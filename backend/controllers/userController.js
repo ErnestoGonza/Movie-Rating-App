@@ -69,4 +69,8 @@ userController.signIn = async (req, res, next) => {
   }
 };
 
+userController.forgotPassword = async (req, res, next) => {
+  
+}
+
 module.exports = userController;
