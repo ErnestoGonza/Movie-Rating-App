@@ -103,7 +103,7 @@ userController.resetPassword = async (req, res, next) => {
   } catch (err) {
     return next({
       status: err.status || 500,
-      message: err.Error,
+      message: err.Error || err,
       method: 'POST',
       location: 'UserController.resetPassword',
     });
