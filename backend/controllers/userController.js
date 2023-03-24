@@ -22,16 +22,15 @@ userController.createUser = async (req, res, next) => {
   try {
     const oldUser = await User.findOne({ email });
 
-    if (oldUser)
-      return res.status(409).json({ error: 'this email is already in use!' });
+    if (oldUser) throw { errMsg: 'This email is already in use!', status: 409 };
 
     const newUser = await User.create({ name, email, password });
     res.locals.newUser = newUser;
     return next();
   } catch (err) {
     return next({
-      status: 500,
-      message: err,
+      status: err.status || 500,
+      message: err.errMsg || err,
       method: 'POST',
       location: 'UserController.createUser',
     });
@@ -57,15 +56,15 @@ userController.signIn = async (req, res, next) => {
     const comparePassword = await existingEmail.comparePassword(password);
 
     if (!email || !existingEmail)
-      return res.status(401).json({ error: 'Invalid email!' });
+      throw { errMsg: 'Invalid email!', status: 401 };
     if (!password || !comparePassword)
-      return res.status(401).json({ error: 'Invalid password!' });
+      throw { errMsg: 'Invalid Password!', status: 401 };
 
     return next();
   } catch (err) {
     return next({
-      status: 500,
-      message: err,
+      status: err.status || 500,
+      message: err.errMsg || err,
       method: 'POST',
       location: 'UserController.signIn',
     });
@@ -76,9 +75,9 @@ userController.resetPassword = async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    if (!email) throw { Error: 'Email is required.', status: 401 };
+    if (!email) throw { errMsg: 'Email is required.', status: 401 };
     const user = await User.findOne({ email });
-    if (!user) throw { Error: 'User not found!', status: 401 };
+    if (!user) throw { errMsg: 'User not found!', status: 401 };
 
     await PasswordResetToken.findOneAndDelete({ owner: user._id });
 
@@ -103,7 +102,7 @@ userController.resetPassword = async (req, res, next) => {
   } catch (err) {
     return next({
       status: err.status || 500,
-      message: err.Error || err,
+      message: err.errMsg || err,
       method: 'POST',
       location: 'UserController.resetPassword',
     });
