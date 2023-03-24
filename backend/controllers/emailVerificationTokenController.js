@@ -39,8 +39,8 @@ const emailVerificationToken = async function (req, res, next) {
     return next();
   } catch (err) {
     return next({
-      status: 500,
-      message: err,
+      status: err.status || 500,
+      message: err.errMsg || err,
       method: 'POST',
       location:
         'controllers/emailVerificationTokenController/emailVerificationToken',
@@ -61,25 +61,24 @@ const emailVerificationToken = async function (req, res, next) {
 const verifyEmail = async (req, res, next) => {
   const { userId, OTP } = req.body;
 
-  //Base case to make sure userId is valid MongoDB id
-  if (!isValidObjectId(userId))
-    return res.status(401).json({ error: 'Invalid user!' });
-
   try {
+    //Base case to make sure userId is valid MongoDB id
+    if (!isValidObjectId(userId))
+      throw { errMsg: 'Invalid user!', status: 401 };
+
     //finds user/ sends res if user not found
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ error: 'user not found!' });
+    if (!user) throw { errMsg: 'user not found!', status: 404 };
 
     if (user.isVerified)
-      return res.status(409).json({ error: 'user is alerady verified' });
+      throw { errMsg: 'user is alerady verified', status: 409 };
 
     const token = await EmailVerificationToken.findOne({ owner: userId });
     if (!token)
-      return res.status(401).json({ error: 'token expired or was not found!' });
+      throw { errMsg: 'token expired or was not found!', status: 401 };
 
     const isMatched = await token.compareToken(OTP);
-    if (!isMatched)
-      return res.status(401).json({ error: 'Please submit a valid OTP!' });
+    if (!isMatched) throw { errMsg: 'Please submit a valid OTP!', status: 401 };
 
     user.isVerified = true;
     await user.save();
@@ -98,8 +97,8 @@ const verifyEmail = async (req, res, next) => {
     return next();
   } catch (err) {
     return next({
-      status: 500,
-      message: err,
+      status: err.status || 500,
+      message: err.errMsg || err,
       method: 'POST',
       location: 'controllers/emailVerificationTokenController/verifyEmail',
     });
@@ -123,10 +122,10 @@ const resendEmailVerificationToken = async (req, res, next) => {
 
   try {
     const user = await User.findById(userId);
-    if (!user) return res.status(401).json({ error: 'user not found!' });
+    if (!user) throw { errMsg: 'user not found!', status: 401 };
 
     if (user.isVerified)
-      return res.status(409).json({ error: 'This email is already verified!' });
+      throw { errMsg: 'This email is already verified!', status: 409 };
 
     await EmailVerificationToken.findOneAndDelete({
       owner: user._id,
@@ -153,8 +152,8 @@ const resendEmailVerificationToken = async (req, res, next) => {
     return next();
   } catch (err) {
     return next({
-      status: 500,
-      message: err,
+      status: err.status || 500,
+      message: err.errMsg || err,
       method: 'POST',
       location:
         'controllers/emailVerificationTokenControllers/resendEmailverificationToken',
