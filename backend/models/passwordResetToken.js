@@ -19,7 +19,7 @@ const passwordResetTokenSchema = mongoose.Schema({
 });
 
 /**
- * @remarks every time our db saves new information we check if token was modified. If it's true then we encrypt our password for security.
+ * @remarks every time our db saves new information we check if token was modified. If it's true then we encrypt our token for security.
  * 
  * @return the next funciton in our middleware chain.
  */
