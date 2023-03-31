@@ -12,7 +12,7 @@ const userController = {};
  * @param {function to keep us going through the middleware chain} next
  * @returns next function in our middleware chain
  *
- * @remarks used in routes/user.js
+ * @remarks used in routes/user.js. Creates the user's account and stores their info in our db
  * @type POST
  */
 
@@ -44,7 +44,7 @@ userController.createUser = async (req, res, next) => {
  * @param {function to keep us going through the middleware chain} next
  * @returns next function in our middleware chain
  *
- * @remarks used in routes/user.js
+ * @remarks used in routes/user.js. Signs in the user to their account and checks to make sure credentials are accurate
  * @type POST
  */
 
@@ -71,6 +71,16 @@ userController.signIn = async (req, res, next) => {
   }
 };
 
+/**
+ *
+ * @param {HTTP request made by user} req
+ * @param {Response to be sent back to user} res
+ * @param {function to keep us going through the middleware chain} next
+ * @returns next function in our middleware chain
+ *
+ * @remarks used in routes/user.js. Intended to send reset token to client email if they forgot their password.
+ * @type POST
+ */
 userController.resetPassword = async (req, res, next) => {
   const { email } = req.body;
 
