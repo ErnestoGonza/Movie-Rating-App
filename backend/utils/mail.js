@@ -3,8 +3,8 @@ const nodemailer = require('nodemailer');
 const emailUtils = {};
 
 /**
- *
  * @param {optional length if OTP needs to be larger or smaller than 6 digits} otpLength
+ * 
  * @returns OTP in string format
  */
 

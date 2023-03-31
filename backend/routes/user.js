@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../controllers/userController');
 const { userValidator, validate } = require('../middlewares/validator');
+const { isValidPassResetToken } = require('../middlewares/userMiddleware');
 const {
   emailVerificationToken,
   verifyEmail,
@@ -47,5 +48,8 @@ router.post('/reset-password', userController.resetPassword, (req, res) => {
     .status(200)
     .json({ message: 'Your reset token has been sent to your email.' });
 });
+
+//In progress...
+router.post('/verify-pass-reset-token', isValidPassResetToken);
 
 module.exports = router;
