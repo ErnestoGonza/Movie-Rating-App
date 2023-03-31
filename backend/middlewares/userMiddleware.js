@@ -17,7 +17,7 @@ userMiddleware.isValidPassResetToken = async (req, res, next) => {
         status: 401,
       };
 
-    const isMatched = await PasswordResetToken.compareToken(token);
+    const isMatched = await passToken.compareToken(token);
     if (!isMatched)
       throw { errMsg: 'Please submit a valid token!', status: 401 };
 

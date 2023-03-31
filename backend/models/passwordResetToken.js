@@ -20,7 +20,7 @@ const passwordResetTokenSchema = mongoose.Schema({
 
 /**
  * @remarks every time our db saves new information we check if token was modified. If it's true then we encrypt our token for security.
- * 
+ *
  * @return the next funciton in our middleware chain.
  */
 passwordResetTokenSchema.pre('save', async function (next) {
@@ -30,8 +30,8 @@ passwordResetTokenSchema.pre('save', async function (next) {
 });
 
 /**
- * 
- * @param {Takes in the user provided token and compares it to the hashed token. } token 
+ *
+ * @param {Takes in the user provided token and compares it to the hashed token. } token
  * @returns Should return true if they match or false if the incorrect token was proivded
  */
 passwordResetTokenSchema.methods.compareToken = async function (token) {

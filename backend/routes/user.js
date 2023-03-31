@@ -51,7 +51,7 @@ router.post('/reset-password', userController.resetPassword, (req, res) => {
 
 //In progress...
 router.post('/verify-pass-reset-token', isValidPassResetToken, (req, res) => {
-  res.json({ valid: true });
+  res.status(200).json({ valid: true });
 });
 
 module.exports = router;
