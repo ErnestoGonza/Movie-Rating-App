@@ -1,28 +1,20 @@
 const express = require('express');
-
-require('dotenv').config();
+const userRoutes = require('./routes/userRoutes');
+// Simply initiates the db in our main server file, index.js is picked by default.
 require('./db');
 
-const PORT = process.env.PORT || 8001;
-const userRouter = require('./routes/user');
-
-//Creates Server
+//Creates server
 const app = express();
+
 //Turns incoming JSON to JS
 app.use(express.json());
 
-app.use('/api/user', userRouter);
+const PORT = 8000;
 
-//Handles any route not found
-app.use('*', (req, res) => {
-  res.status(400).json('Page Not Found!');
+app.use('/api/user', userRoutes);
+
+app.get('/about', (req, res) => {
+  res.status(200).send('<h1>Hello from About</h1>');
 });
 
-//Global Error Handler
-app.use((err, req, res, next) => {
-  res
-    .status(err.status || 500)
-    .send({ message: err.message, method: err.method, location: err.location });
-});
-
-app.listen(PORT, () => console.log(`app is listening on Port: ${PORT}`));
+app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));

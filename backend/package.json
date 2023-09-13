@@ -1,31 +1,19 @@
 {
-  "name": "movie-rating-app",
+  "name": "backend-rating-api",
   "version": "1.0.0",
-  "description": "Movie-Rating-App",
+  "description": "Backend for Movie rating app",
   "main": "server.js",
   "scripts": {
-    "test": "test",
     "start": "nodemon server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ErnestoGonza/Movie-Rating-App.git"
   },
   "author": "Ernesto Gonzalez",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ErnestoGonza/Movie-Rating-App/issues"
-  },
-  "homepage": "https://github.com/ErnestoGonza/Movie-Rating-App#readme",
   "dependencies": {
-    "bcrypt": "^5.1.0",
     "express": "^4.18.2",
-    "express-validator": "^6.15.0",
-    "mongoose": "^6.9.2",
-    "nodemailer": "^6.9.1"
+    "mongodb": "^6.0.0",
+    "mongoose": "^7.5.1"
   },
   "devDependencies": {
-    "dotenv": "^16.0.3",
-    "nodemon": "^2.0.20"
+    "nodemon": "^3.0.1"
   }
 }

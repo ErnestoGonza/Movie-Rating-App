@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 mongoose
-  .connect(process.env.DB_URL)
-  .then(() => console.log('DB is Connected!'))
-  .catch((err) => console.log('ERROR IN DB: ', err));
+  .connect(
+    'mongodb+srv://TheRaftMaker:cvIDRBvAk0XQKZBl@cluster0.dj98x50.mongodb.net/?retryWrites=true&w=majority'
+  )
+  .then(() => {
+    console.log('db is connected!');
+  })
+  .catch((err) => {
+    console.log('db connection failed: ', err);
+  });
