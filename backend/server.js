@@ -13,8 +13,18 @@ const PORT = 8000;
 
 app.use('/api/user', userRoutes);
 
-app.get('/about', (req, res) => {
-  res.status(200).send('<h1>Hello from About</h1>');
-});
+app.post(
+  '/sign-in',
+  (req, res, next) => {
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res.status(401).json({ error: 'Email or password missing!' });
+
+    next();
+  },
+  (req, res) => {
+    res.status(200).send('<h1>Hello from About</h1>');
+  }
+);
 
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
