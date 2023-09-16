@@ -3,7 +3,7 @@ const EmailVerificationToken = require('../models/emailVerificationToken');
 
 const generateOTP = (otpLength = 6) => {
   let OTP = '';
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < otpLength; i++) {
     OTP += Math.floor(Math.random() * 10);
   }
   return OTP;
