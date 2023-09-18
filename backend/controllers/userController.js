@@ -4,6 +4,7 @@ const PasswordResetToken = require('../models/passwordResetToken');
 const User = require('../models/userSchema');
 const { transport, sendTokenByEmail } = require('../utils/mail');
 const { generateRandomByte } = require('../utils/helper');
+const jwt = require('jsonwebtoken');
 
 const create = async (req, res) => {
   const { name, email, password } = req.body;
@@ -182,6 +183,23 @@ const resetPassword = async (req, res) => {
   res.status(200).json({ message: 'Password reset successfully!' });
 };
 
+const signIn = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) return res.status(401).json({ error: 'Email/Password mismatch!' });
+
+  const matched = await user.comparePassword(password);
+  if (!matched)
+    return res.status(401).json({ error: 'Email/Password mismatch!' });
+
+  const { _id, name } = user;
+
+  const jwtToken = jwt.sign({ userId: _id }, process.env.JWT_SECRET);
+
+  res.status(200).json({ user: { id: _id, name, email, token: jwtToken } });
+};
+
 module.exports = {
   create,
   verifyEmail,
@@ -189,4 +207,5 @@ module.exports = {
   forgotPassword,
   sendResetPasswordTokenStatus,
   resetPassword,
+  signIn,
 };

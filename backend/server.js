@@ -1,8 +1,7 @@
 const express = require('express');
-const userRoutes = require('./routes/userRoutes');
-// Simply initiates the db in our main server file, index.js is picked by default.
+require('dotenv').config();
 require('./db');
-
+const userRoutes = require('./routes/userRoutes');
 //Creates server
 const app = express();
 
