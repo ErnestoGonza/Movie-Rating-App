@@ -100,16 +100,11 @@ const resendEmailVerificationToken = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
-  let user;
 
   if (!email) return res.status(409).json({ error: 'Email is missing!' });
 
-  try {
-    user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ error: 'User not found!' });
-  } catch (err) {
-    console.log('Error reseting password: ', err);
-  }
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ error: 'User not found!' });
 
   await PasswordResetToken.findOneAndDelete({ owner: user._id });
 
@@ -147,23 +142,18 @@ const sendResetPasswordTokenStatus = (req, res) => {
 
 const resetPassword = async (req, res) => {
   const { newPassword, userId } = req.body;
-  let user;
 
-  try {
-    user = await User.findById(userId);
-    const matched = await user.comparePassword(newPassword);
-    if (matched)
-      return res.status(409).json({
-        error: 'New password must be different from the old password.',
-      });
+  const user = await User.findById(userId);
+  const matched = await user.comparePassword(newPassword);
+  if (matched)
+    return res.status(409).json({
+      error: 'New password must be different from the old password.',
+    });
 
-    user.password = newPassword;
+  user.password = newPassword;
 
-    await user.save();
-    await PasswordResetToken.findByIdAndDelete(req.resetToken._id);
-  } catch (err) {
-    console.log('Error: ', err);
-  }
+  await user.save();
+  await PasswordResetToken.findByIdAndDelete(req.resetToken._id);
 
   const mailOptions = {
     from: 'security@reviewapp.com',
