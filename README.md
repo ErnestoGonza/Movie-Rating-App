@@ -1,6 +1,6 @@
 # Movie-Rating-App
 
-#To Start
+#To Start backend
 
 - Run npm install
 - create .env file:
