@@ -1,8 +1,9 @@
 # Movie-Rating-App
 
-#To Start
+#To Start backend
 
 - Run npm install
 - create .env file:
-  - Currently needs PORT number and DB_URL
-  - NODEMAILER_USER and NODEMAILER_PASS for Nodemailer
+  - MONGO_URI
+  - JWT_SECRET
+  - MAIL_TRAP_USER & MAIL_TRAP_PASS for Nodemailer
