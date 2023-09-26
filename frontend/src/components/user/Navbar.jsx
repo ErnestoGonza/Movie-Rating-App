@@ -1,8 +1,11 @@
 import React from 'react';
 import { BsFillSunFill } from 'react-icons/bs';
 import Screen from '../MainContainer';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-secondary shadow-sm shadow-gray-500">
       <Screen className={'p-2 flex justify-around h-14'}>
@@ -28,9 +31,12 @@ export default function Navbar() {
             />
           </li>
           <li>
-            <button className="group relative text-white font-semibold py-2 px-4 rounded text-xl">
+            <button
+              className="group relative text-white font-semibold py-2 px-4 rounded text-xl transition-transform active:bg-logo"
+              onClick={() => navigate('/sign-in')}
+            >
               Login
-              <span className="absolute left-0 bottom-0 w-full h-0.5 bg-logo transform scale-x-0 group-hover:scale-x-100 transition-transform duration-400"></span>
+              <span className="absolute left-0 bottom-0 w-full h-0.5 bg-logo transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
             </button>
           </li>
         </ul>

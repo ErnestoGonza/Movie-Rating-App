@@ -29,7 +29,6 @@ exports.signInValidator = [
 
 exports.validate = (req, res, next) => {
   const error = validationResult(req).array();
-  //console.log(error);
 
   if (error.length) {
     res.status(401).json({ error: error[0].msg });
