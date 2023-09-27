@@ -5,6 +5,8 @@ const defaultTheme = 'light';
 const darkTheme = 'dark';
 
 export default function ThemeProvider({ children }) {
+  const getTheme = () => localStorage.getItem('theme');
+
   const toggleTheme = () => {
     const oldTheme = getTheme();
     const newTheme = oldTheme === defaultTheme ? darkTheme : defaultTheme;
@@ -25,8 +27,6 @@ export default function ThemeProvider({ children }) {
     </ThemeContext.Provider>
   );
 }
-
-const getTheme = () => localStorage.getItem('theme');
 
 const updateTheme = (newTheme, oldTheme) => {
   if (oldTheme) document.documentElement.classList.remove(oldTheme);

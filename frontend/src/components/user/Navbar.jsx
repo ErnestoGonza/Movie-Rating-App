@@ -1,11 +1,12 @@
-import React from 'react';
-import { BsFillSunFill } from 'react-icons/bs';
+import React, { useState } from 'react';
+import { BsFillSunFill, BsMoonFill } from 'react-icons/bs';
 import Screen from './MainContainer';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../hooks';
 
 export default function Navbar() {
   const { toggleTheme } = useTheme();
+  const [theme, setTheme] = useState(localStorage.getItem('theme'));
 
   return (
     <div className="bg-secondary shadow-sm shadow-gray-500">
@@ -27,16 +28,23 @@ export default function Navbar() {
         <ul className="flex items-center space-x-4">
           <li>
             <button
-              onClick={toggleTheme}
-              className="bg-dark-subtle p-1 rounded hover:bg-white"
+              onClick={() => {
+                toggleTheme();
+                setTheme(localStorage.getItem('theme'));
+              }}
+              className="dark:bg-dark-subtle p-1 rounded dark:hover:bg-white bg-white hover:bg-dark-subtle"
             >
-              <BsFillSunFill className="text-secondary" size={24} />
+              {theme === 'dark' ? (
+                <BsFillSunFill className="text-secondary" size={24} />
+              ) : (
+                <BsMoonFill className="text-secondary" size={24} />
+              )}
             </button>
           </li>
           <li>
             <input
               type="text"
-              className="border-2 border-dark-subtle p-1 rounded bg-transparent text-l outline-none focus:border-white transition text-white"
+              className="border-2 border-dark-subtle p-1 rounded bg-transparent text-l outline-none focus:border-logo transition text-white"
               placeholder="Search..."
             />
           </li>
