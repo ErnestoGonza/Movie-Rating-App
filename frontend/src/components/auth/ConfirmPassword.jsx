@@ -1,14 +1,16 @@
 import React from 'react';
-import MainContainer from '../MainContainer';
+import MainContainer from '../user/MainContainer';
 import Title from '../form/Title';
 import FormInput from '../form/FormInput';
 import Submit from '../form/Submit';
+import { commonModalClasses } from '../../utils/theme';
+import FormContainer from '../form/FormContainer';
 
 export default function ConfirmPassword() {
   return (
-    <div className="fixed inset-0 dark:bg-primary -z-10 flex justify-center items-center ">
+    <FormContainer>
       <MainContainer className={'flex justify-center'}>
-        <form className="dark:bg-secondary rounded p-5 w-72 space-y-5">
+        <form className={`${commonModalClasses} w-72`}>
           <Title>Enter New Password</Title>
           <FormInput
             label="New Password"
@@ -25,6 +27,6 @@ export default function ConfirmPassword() {
           <Submit value={'Change Password'} />
         </form>
       </MainContainer>
-    </div>
+    </FormContainer>
   );
 }

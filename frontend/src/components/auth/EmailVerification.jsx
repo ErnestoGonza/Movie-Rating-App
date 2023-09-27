@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
-import MainContainer from '../MainContainer';
+import MainContainer from '../user/MainContainer';
 import Title from '../form/Title';
 import Submit from '../form/Submit';
+import { commonModalClasses } from '../../utils/theme';
+import FormContainer from '../form/FormContainer';
 
 const OTP_LENGTH = 6;
 
@@ -40,12 +42,12 @@ export default function EmailVerification() {
   };
 
   return (
-    <div className="fixed inset-0 dark:bg-primary -z-10 flex justify-center items-center ">
+    <FormContainer>
       <MainContainer className={'flex justify-center'}>
-        <form className="dark:bg-secondary rounded p-6 space-y-6">
+        <form className={`${commonModalClasses}`}>
           <div>
             <Title>Please enter your 6-digit verificaiton code</Title>
-            <p className="text-center text-dark-subtle">
+            <p className="text-center dark:text-dark-subtle text-light-subtle">
               Code has been sent to your email
             </p>
           </div>
@@ -63,7 +65,7 @@ export default function EmailVerification() {
                   value={otp[index]}
                   onChange={(event) => handleInputChange(event, index)}
                   onKeyDown={(event) => handleKeyDown(event, index)}
-                  className="w-12 h-12 border-2 rounded border-dark-subtle focus:border-white bg-transparent outline-none text-center text-white font-semibold"
+                  className="w-12 h-12 border-2 rounded dark:border-dark-subtle border-light-subtle dark:focus:border-white focus:border-primary bg-transparent outline-none text-center dark:text-white text-primary font-semibold"
                 />
               );
             })}
@@ -71,6 +73,6 @@ export default function EmailVerification() {
           <Submit value={'Send Link'} />
         </form>
       </MainContainer>
-    </div>
+    </FormContainer>
   );
 }

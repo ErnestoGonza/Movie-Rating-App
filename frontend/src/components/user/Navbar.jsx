@@ -1,6 +1,6 @@
 import React from 'react';
 import { BsFillSunFill } from 'react-icons/bs';
-import Screen from '../MainContainer';
+import Screen from './MainContainer';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../hooks';
 
