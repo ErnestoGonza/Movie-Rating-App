@@ -65,7 +65,7 @@ export default function EmailVerification() {
                   value={otp[index]}
                   onChange={(event) => handleInputChange(event, index)}
                   onKeyDown={(event) => handleKeyDown(event, index)}
-                  className="w-12 h-12 border-2 rounded dark:border-dark-subtle border-light-subtle dark:focus:border-white focus:border-primary bg-transparent outline-none text-center dark:text-white text-primary font-semibold"
+                  className="w-12 h-12 border-2 rounded dark:border-dark-subtle border-light-subtle focus:border-logo bg-transparent outline-none text-center dark:text-white text-primary font-semibold"
                 />
               );
             })}

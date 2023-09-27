@@ -1,7 +1,6 @@
 import React from 'react';
 import MainContainer from '../user/MainContainer';
 import Title from '../form/Title';
-import { Link } from 'react-router-dom';
 import FormInput from '../form/FormInput';
 import Submit from '../form/Submit';
 import { commonModalClasses } from '../../utils/theme';
