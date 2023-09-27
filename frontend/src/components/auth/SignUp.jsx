@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 
 export default function SignUp() {
   return (
-    <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center ">
+    <div className="fixed inset-0 dark:bg-primary -z-10 flex justify-center items-center ">
       <MainContainer className={'flex justify-center'}>
-        <form className="bg-secondary rounded p-5 w-72 space-y-5">
+        <form className="dark:bg-secondary rounded p-5 w-72 space-y-5">
           <Title>Create Account</Title>
           <FormInput label="First Name" placeholder="John" name="first name" />
           <FormInput label="Last Name" placeholder="Doe" name="last name" />

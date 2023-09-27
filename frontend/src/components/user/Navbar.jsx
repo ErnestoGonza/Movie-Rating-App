@@ -1,16 +1,17 @@
 import React from 'react';
 import { BsFillSunFill } from 'react-icons/bs';
 import Screen from '../MainContainer';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useTheme } from '../../hooks';
 
 export default function Navbar() {
-  const navigate = useNavigate();
+  const { toggleTheme } = useTheme();
 
   return (
     <div className="bg-secondary shadow-sm shadow-gray-500">
       <Screen className={'p-2 flex justify-around h-14'}>
-        <div
-          onClick={() => navigate('/')}
+        <Link
+          to={'/'}
           className="flex items-center space-x-4"
           style={{
             cursor: 'pointer',
@@ -22,10 +23,13 @@ export default function Navbar() {
             className="h-8"
           />
           <p className="font-logo text-2xl text-logo">Amity</p>
-        </div>
+        </Link>
         <ul className="flex items-center space-x-4">
           <li>
-            <button className="bg-dark-subtle p-1 rounded hover:bg-white">
+            <button
+              onClick={toggleTheme}
+              className="bg-dark-subtle p-1 rounded hover:bg-white"
+            >
               <BsFillSunFill className="text-secondary" size={24} />
             </button>
           </li>
