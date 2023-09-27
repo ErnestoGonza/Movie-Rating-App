@@ -15,13 +15,13 @@ export default function ForgotPassword() {
           <Submit value={'Send Link'} />
           <div className="flex justify-between">
             <Link
-              className="text-dark-subtle hover:text-white transition"
+              className="dark:text-dark-subtle text-light-subtle dark:hover:text-white hover:text-primary transition"
               to="/auth/sign-in"
             >
               Sign in
             </Link>
             <Link
-              className="text-dark-subtle hover:text-white transition"
+              className="dark:text-dark-subtle text-light-subtle dark:hover:text-white hover:text-primary transition"
               to="/auth/sign-up"
             >
               Sign up
