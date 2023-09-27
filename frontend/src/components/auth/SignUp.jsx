@@ -3,6 +3,7 @@ import MainContainer from '../MainContainer';
 import Title from '../form/Title';
 import FormInput from '../form/FormInput';
 import Submit from '../form/Submit';
+import { Link } from 'react-router-dom';
 
 export default function SignUp() {
   return (
@@ -16,12 +17,12 @@ export default function SignUp() {
           <FormInput label="Password" placeholder="*********" name="password" />
           <Submit value={'Create Account'} />
           <div className="flex justify-center">
-            <a
+            <Link
               className="text-dark-subtle hover:text-white transition"
-              href="/sign-in"
+              to="/auth/sign-in"
             >
               Already have an Account?
-            </a>
+            </Link>
           </div>
         </form>
       </MainContainer>

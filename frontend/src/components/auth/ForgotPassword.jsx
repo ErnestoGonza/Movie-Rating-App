@@ -1,25 +1,24 @@
 import React from 'react';
 import MainContainer from '../MainContainer';
 import Title from '../form/Title';
+import { Link } from 'react-router-dom';
 import FormInput from '../form/FormInput';
 import Submit from '../form/Submit';
-import { Link } from 'react-router-dom';
 
-export default function SignIn() {
+export default function ForgotPassword() {
   return (
     <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center ">
       <MainContainer className={'flex justify-center'}>
-        <form className="bg-secondary rounded p-6 w-72 space-y-6">
-          <Title>Sign In</Title>
+        <form className="bg-secondary rounded p-5 w-72 space-y-5">
+          <Title>Please Enter Your Email</Title>
           <FormInput label="Email" placeholder="john@gmail.com" name="email" />
-          <FormInput label="Password" placeholder="*********" name="password" />
-          <Submit value={'Sign In'} />
+          <Submit value={'Send Link'} />
           <div className="flex justify-between">
             <Link
               className="text-dark-subtle hover:text-white transition"
-              to="/auth/forgot-password"
+              to="/auth/sign-in"
             >
-              Forgot Password
+              Sign in
             </Link>
             <Link
               className="text-dark-subtle hover:text-white transition"
