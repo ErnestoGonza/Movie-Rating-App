@@ -1,19 +1,44 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import MainContainer from '../user/MainContainer';
 import Title from '../form/Title';
 import Submit from '../form/Submit';
 import { commonModalClasses } from '../../utils/theme';
 import FormContainer from '../form/FormContainer';
+import { verifyUserEmail } from '../../api/auth';
+import {
+  errorNotification,
+  successNotificaiton,
+} from '../../context/Notification';
 
 const OTP_LENGTH = 6;
+
+const isValidOTP = (otp) => {
+  let valid = false;
+
+  for (let el of otp) {
+    valid = !isNaN(parseInt(el));
+    if (!valid) break;
+  }
+
+  return valid;
+};
 
 export default function EmailVerification() {
   const [otp, setOtp] = useState(new Array(OTP_LENGTH).fill(''));
   const inputRefs = useRef(Array(OTP_LENGTH).fill(null));
+  const navigate = useNavigate();
+
+  const { state } = useLocation();
+  const user = state?.user;
 
   useEffect(() => {
     inputRefs.current[0].focus();
   }, []);
+
+  useEffect(() => {
+    if (!user) navigate('/not-found');
+  }, [user, navigate]);
 
   const handleInputChange = (event, index) => {
     const value = event.target.value;
@@ -41,10 +66,27 @@ export default function EmailVerification() {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!isValidOTP(otp)) {
+      return errorNotification('Invalid OTP');
+    } else {
+      const { error, message } = await verifyUserEmail({
+        userId: user.id,
+        OTP: otp.join(''),
+      });
+
+      if (error) return errorNotification(error);
+
+      return successNotificaiton(message);
+    }
+  };
+
   return (
     <FormContainer>
       <MainContainer className={'flex justify-center'}>
-        <form className={`${commonModalClasses}`}>
+        <form onSubmit={handleSubmit} className={`${commonModalClasses}`}>
           <div>
             <Title>Please enter your 6-digit verificaiton code</Title>
             <p className="text-center dark:text-dark-subtle text-light-subtle">
@@ -70,7 +112,7 @@ export default function EmailVerification() {
               );
             })}
           </div>
-          <Submit value={'Send Link'} />
+          <Submit value={'Verify Account'} />
         </form>
       </MainContainer>
     </FormContainer>

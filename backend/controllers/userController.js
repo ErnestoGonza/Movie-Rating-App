@@ -28,8 +28,11 @@ const create = async (req, res) => {
   sendTokenByEmail(newUser);
 
   res.status(201).json({
-    message:
-      'Please verify your account. Email has been sent with 6 digit token.',
+    user: {
+      id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+    },
   });
 };
 

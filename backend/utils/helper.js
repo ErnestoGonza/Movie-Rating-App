@@ -11,6 +11,8 @@ const generateRandomByte = () => {
   });
 };
 
+const handleNotFound = 
+
 module.exports = {
   generateRandomByte,
 };
