@@ -8,9 +8,11 @@ export const errorNotification = (error) => {
     toastId: error,
   });
 
-  toast.update(error, { type: toast.TYPE.ERROR });
+  toast.update(error, {
+    type: toast.TYPE.ERROR,
+    theme: theme === 'light' ? 'dark' : 'light',
+  });
 };
-
 
 export const successNotificaiton = (success) => {
   const theme = localStorage.getItem('theme');
@@ -20,5 +22,8 @@ export const successNotificaiton = (success) => {
     toastId: success,
   });
 
-  toast.update(success, { type: toast.TYPE.SUCCESS });
+  toast.update(success, {
+    type: toast.TYPE.SUCCESS,
+    theme: theme === 'light' ? 'dark' : 'light',
+  });
 };

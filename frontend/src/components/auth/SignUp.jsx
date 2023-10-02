@@ -57,7 +57,7 @@ export default function SignUp() {
 
     const validUser = validateUserInfo(userInfo);
 
-    if (!validUser.ok) console.log(validUser.error);
+    if (!validUser.ok) errorNotification(validUser.error);
 
     const { error, user } = await createUser(userInfo);
     if (error) return errorNotification(error);

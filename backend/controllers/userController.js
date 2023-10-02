@@ -75,7 +75,16 @@ const verifyEmail = async (req, res) => {
     console.log('Message sent: ', info.messageId);
   });
 
-  res.status(200).json({ message: 'Your email is verified!' });
+  const { _id, name, email } = user;
+
+  const jwtToken = jwt.sign({ userId: _id }, process.env.JWT_SECRET);
+
+  res
+    .status(200)
+    .json({
+      user: { _id, name, email, token: jwtToken },
+      message: 'Your email is verified!',
+    });
 };
 
 const resendEmailVerificationToken = async (req, res) => {
