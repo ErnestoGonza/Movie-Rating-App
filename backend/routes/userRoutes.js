@@ -15,6 +15,7 @@ const {
   signInValidator,
 } = require('../middleware/validator');
 const { isValidPassResetToken } = require('../middleware/user');
+const { isAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -35,5 +36,13 @@ router.post(
   isValidPassResetToken,
   resetPassword
 );
+
+router.get('/is-auth', isAuth, (req, res) => {
+  const { user } = req;
+
+  res
+    .status(200)
+    .json({ user: { id: user._id, name: user.name, email: user.email } });
+});
 
 module.exports = router;
