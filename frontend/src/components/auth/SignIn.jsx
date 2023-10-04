@@ -9,6 +9,7 @@ import { CustomLink } from '../form/CustomLink';
 import { errorNotification } from '../../context/Notification';
 import { useAuth } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
+import { validateEmail, validatePassword } from '../../utils/helper';
 
 export default function SignIn() {
   const [userInfo, setUserInfo] = useState({
@@ -30,15 +31,11 @@ export default function SignIn() {
   };
 
   const validateUserInfo = ({ email, password }) => {
-    const isValidEmail =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
     if (!email.trim()) return { ok: false, error: 'Email is missing!' };
-    if (!isValidEmail.test(email))
-      return { ok: false, error: 'Invalid email!' };
+    if (!validateEmail(email)) return { ok: false, error: 'Invalid Email!' };
 
     if (!password.trim()) return { ok: false, error: 'Password is missing!' };
-    if (password.length < 8 || password.length > 20)
+    if (!validatePassword(password))
       return {
         ok: false,
         error: 'Password must be between 8 - 20 characters!',

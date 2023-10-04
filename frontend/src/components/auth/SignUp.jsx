@@ -10,6 +10,11 @@ import { CustomLink } from '../form/CustomLink';
 import { createUser } from '../../api/auth';
 import { errorNotification } from '../../context/Notification';
 import { useAuth } from '../../hooks';
+import {
+  validateEmail,
+  validatePassword,
+  validateName,
+} from '../../utils/helper';
 
 export default function SignUp() {
   const [userInfo, setUserInfo] = useState({
@@ -34,19 +39,14 @@ export default function SignUp() {
   };
 
   const validateUserInfo = ({ name, email, password }) => {
-    const isValidEmail =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const isValidName = /^[a-z A-Z]+$/;
-
     if (!name.trim()) return { ok: false, error: 'Name is missing!' };
-    if (!isValidName.test(name)) return { ok: false, error: 'Invalid name!' };
+    if (!validateName(name)) return { ok: false, error: 'Invalid name!' };
 
     if (!email.trim()) return { ok: false, error: 'Email is missing!' };
-    if (!isValidEmail.test(email))
-      return { ok: false, error: 'Invalid email!' };
+    if (!validateEmail(email)) return { ok: false, error: 'Invalid email!' };
 
     if (!password.trim()) return { ok: false, error: 'Password is missing!' };
-    if (password.length < 8 || password.length > 20)
+    if (!validatePassword(password))
       return {
         ok: false,
         error: 'Password must be between 8 - 20 characters!',
