@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MainContainer from '../user/MainContainer';
 import Title from '../form/Title';
 import FormInput from '../form/FormInput';
 import Submit from '../form/Submit';
 import { commonModalClasses } from '../../utils/theme';
 import FormContainer from '../form/FormContainer';
-import CustomLink from '../user/CustomLink';
+import { CustomLink } from '../form/CustomLink';
 import { errorNotification } from '../../context/Notification';
 import { useAuth } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
   const [userInfo, setUserInfo] = useState({
@@ -15,9 +16,9 @@ export default function SignIn() {
     password: '',
   });
 
+  const navigate = useNavigate();
   const { handleLogin, authInfo } = useAuth();
-
-  const { isPending } = authInfo;
+  const { isPending, isLoggedIn } = authInfo;
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
@@ -57,6 +58,10 @@ export default function SignIn() {
 
     if (authInfo.error) errorNotification(authInfo.error);
   };
+
+  useEffect(() => {
+    if (isLoggedIn) navigate('/'); // Navigate somewhere
+  }, [isLoggedIn, navigate]);
 
   return (
     <FormContainer>

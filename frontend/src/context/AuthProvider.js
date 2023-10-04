@@ -28,6 +28,11 @@ export default function AuthProvider({ children }) {
     localStorage.setItem('auth-token', user.token);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('auth-token');
+    setAuthInfo((prev) => ({ ...prev, ...defaultAuthInfo }));
+  };
+
   const isAuth = useCallback(async () => {
     const token = localStorage.getItem('auth-token');
 
@@ -64,6 +69,7 @@ export default function AuthProvider({ children }) {
       value={{
         authInfo,
         handleLogin,
+        handleLogout,
         isAuth,
       }}
     >

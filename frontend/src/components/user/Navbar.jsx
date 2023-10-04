@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { BsFillSunFill, BsMoonFill } from 'react-icons/bs';
 import Screen from './MainContainer';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../../hooks';
+import { useAuth, useTheme } from '../../hooks';
 
 export default function Navbar() {
   const { toggleTheme } = useTheme();
   const [theme, setTheme] = useState(localStorage.getItem('theme'));
+  const { authInfo, handleLogout } = useAuth();
+  const { isLoggedIn } = authInfo;
 
   return (
     <div className="bg-secondary shadow-sm shadow-gray-500">
@@ -49,13 +51,23 @@ export default function Navbar() {
             />
           </li>
           <li>
-            <Link
-              className="group relative text-white font-semibold py-2 px-4 rounded text-l transition-transform active:bg-logo"
-              to="/auth/sign-in"
-            >
-              Login
-              <span className="absolute left-0 bottom-0 w-full h-0.5 bg-logo transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
-            </Link>
+            {isLoggedIn ? (
+              <button
+                className="group relative text-white font-semibold py-2 px-4 rounded text-l transition-transform active:bg-logo"
+                onClick={handleLogout}
+              >
+                Log out
+                <span className="absolute left-0 bottom-0 w-full h-0.5 bg-logo transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+              </button>
+            ) : (
+              <Link
+                className="group relative text-white font-semibold py-2 px-4 rounded text-l transition-transform active:bg-logo"
+                to="/auth/sign-in"
+              >
+                Login
+                <span className="absolute left-0 bottom-0 w-full h-0.5 bg-logo transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+              </Link>
+            )}
           </li>
         </ul>
       </Screen>

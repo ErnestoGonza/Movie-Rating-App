@@ -10,6 +10,7 @@ import {
   errorNotification,
   successNotificaiton,
 } from '../../context/Notification';
+import { useAuth } from '../../hooks';
 
 const OTP_LENGTH = 6;
 
@@ -28,6 +29,8 @@ export default function EmailVerification() {
   const [otp, setOtp] = useState(new Array(OTP_LENGTH).fill(''));
   const inputRefs = useRef(Array(OTP_LENGTH).fill(null));
   const navigate = useNavigate();
+  const { isAuth, authInfo } = useAuth();
+  const { isLoggedIn } = authInfo;
 
   const { state } = useLocation();
   const user = state?.user;
@@ -38,7 +41,8 @@ export default function EmailVerification() {
 
   useEffect(() => {
     if (!user) navigate('/not-found');
-  }, [user, navigate]);
+    if (isLoggedIn) navigate('/');
+  }, [user, isLoggedIn, navigate]);
 
   const handleInputChange = (event, index) => {
     const value = event.target.value;
@@ -72,14 +76,20 @@ export default function EmailVerification() {
     if (!isValidOTP(otp)) {
       return errorNotification('Invalid OTP');
     } else {
-      const { error, message } = await verifyUserEmail({
+      const {
+        error,
+        message,
+        user: verifiedUser,
+      } = await verifyUserEmail({
         userId: user.id,
         OTP: otp.join(''),
       });
 
       if (error) return errorNotification(error);
 
-      return successNotificaiton(message);
+      successNotificaiton(message);
+      localStorage.setItem('auth-token', verifiedUser.token);
+      isAuth();
     }
   };
 
