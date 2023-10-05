@@ -12,7 +12,7 @@ import { errorNotification } from '../../context/Notification';
 import { useAuth } from '../../hooks';
 import {
   validateEmail,
-  validatePassword,
+  isValidPassword,
   validateName,
 } from '../../utils/helper';
 
@@ -46,7 +46,7 @@ export default function SignUp() {
     if (!validateEmail(email)) return { ok: false, error: 'Invalid email!' };
 
     if (!password.trim()) return { ok: false, error: 'Password is missing!' };
-    if (!validatePassword(password))
+    if (!isValidPassword(password))
       return {
         ok: false,
         error: 'Password must be between 8 - 20 characters!',
@@ -60,7 +60,7 @@ export default function SignUp() {
 
     const validUser = validateUserInfo(userInfo);
 
-    if (!validUser.ok) errorNotification(validUser.error);
+    if (!validUser.ok) return errorNotification(validUser.error);
 
     const { error, user } = await createUser(userInfo);
     if (error) return errorNotification(error);

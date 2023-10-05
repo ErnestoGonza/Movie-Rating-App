@@ -79,12 +79,10 @@ const verifyEmail = async (req, res) => {
 
   const jwtToken = jwt.sign({ userId: _id }, process.env.JWT_SECRET);
 
-  res
-    .status(200)
-    .json({
-      user: { _id, name, email, token: jwtToken },
-      message: 'Your email is verified!',
-    });
+  res.status(200).json({
+    user: { _id, name, email, token: jwtToken },
+    message: 'Your email is verified!',
+  });
 };
 
 const resendEmailVerificationToken = async (req, res) => {
@@ -127,7 +125,7 @@ const forgotPassword = async (req, res) => {
   });
   await newPasswordResetToken.save();
 
-  const resetPasswordUrl = `http://localhost:3000/reset-password?token=${token}&id=${user._id}`;
+  const resetPasswordUrl = `http://localhost:3000/auth/reset-password?token=${token}&id=${user._id}`;
 
   const mailOptions = {
     from: 'security@reviewapp.com',

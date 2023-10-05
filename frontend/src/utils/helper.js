@@ -5,7 +5,7 @@ export const validateEmail = (email) => {
   return isValid.test(email);
 };
 
-export const validatePassword = (password) => {
+export const isValidPassword = (password) => {
   return password.length < 8 || password.length > 20 ? false : true;
 };
 

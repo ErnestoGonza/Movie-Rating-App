@@ -9,7 +9,7 @@ import { CustomLink } from '../form/CustomLink';
 import { errorNotification } from '../../context/Notification';
 import { useAuth } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
-import { validateEmail, validatePassword } from '../../utils/helper';
+import { validateEmail, isValidPassword } from '../../utils/helper';
 
 export default function SignIn() {
   const [userInfo, setUserInfo] = useState({
@@ -32,13 +32,14 @@ export default function SignIn() {
 
   const validateUserInfo = ({ email, password }) => {
     if (!email.trim()) return { ok: false, error: 'Email is missing!' };
-    if (!validateEmail(email)) return { ok: false, error: 'Invalid Email!' };
-
     if (!password.trim()) return { ok: false, error: 'Password is missing!' };
-    if (!validatePassword(password))
+
+    if (!validateEmail(email)) return { ok: false, error: 'Invalid Email' };
+
+    if (!isValidPassword(password))
       return {
         ok: false,
-        error: 'Password must be between 8 - 20 characters!',
+        error: 'Password must be between 8 to 20 characters',
       };
 
     return { ok: true };
@@ -49,16 +50,18 @@ export default function SignIn() {
 
     const validUser = validateUserInfo(userInfo);
 
-    if (!validUser.ok) errorNotification(validUser.error);
+    if (!validUser.ok) return errorNotification(validUser.error);
 
-    handleLogin(userInfo.email, userInfo.password);
-
-    if (authInfo.error) errorNotification(authInfo.error);
+    await handleLogin(userInfo.email, userInfo.password);
   };
 
   useEffect(() => {
-    if (isLoggedIn) navigate('/'); // Navigate somewhere
+    if (isLoggedIn) navigate('/');
   }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
+    if (authInfo.error) errorNotification(authInfo.error);
+  }, [authInfo.error]);
 
   return (
     <FormContainer>

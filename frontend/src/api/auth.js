@@ -7,6 +7,7 @@ export const createUser = async (userInfo) => {
   } catch (err) {
     const { response } = err;
 
+    if (response?.data?.message) return { error: response.data.message };
     if (response?.data) return response.data;
 
     return { error: err.message || err };
@@ -20,6 +21,7 @@ export const verifyUserEmail = async (userInfo) => {
   } catch (err) {
     const { response } = err;
 
+    if (response?.data?.message) return { error: response.data.message };
     if (response?.data) return response.data;
 
     return { error: err.message || err };
@@ -33,6 +35,7 @@ export const userSignIn = async (userInfo) => {
   } catch (err) {
     const { response } = err;
 
+    if (response?.data?.message) return { error: response.data.message };
     if (response?.data) return response.data;
 
     return { error: err.message || err };
@@ -51,6 +54,7 @@ export const getIsAuth = async (token) => {
   } catch (err) {
     const { response } = err;
 
+    if (response?.data?.message) return { error: response.data.message };
     if (response?.data) return response.data;
 
     return { error: err.message || err };
@@ -65,13 +69,19 @@ export const forgotPassword = async (email) => {
   } catch (err) {
     const { response } = err;
 
+    if (response?.data?.message) return { error: response.data.message };
     if (response?.data) return response.data;
 
     return { error: err.message || err };
   }
 };
 
-export const verifyPasswordResetToken = async ({ token, userId }) => {
+export const verifyPasswordResetToken = async (token, userId) => {
+  if (!token || !userId) {
+    token = '';
+    userId = '';
+  }
+
   try {
     const { data } = await client.post('/user/verify-password-reset-token', {
       token,
@@ -82,7 +92,8 @@ export const verifyPasswordResetToken = async ({ token, userId }) => {
   } catch (err) {
     const { response } = err;
 
-    if (response?.data) return response.data;
+    if (response?.data?.message) return { error: response.data.message };
+    if (response?.data) return { error: response.data };
 
     return { error: err.message || err };
   }
