@@ -6,8 +6,11 @@ import FormInput from '../form/FormInput';
 import Submit from '../form/Submit';
 import { commonModalClasses } from '../../utils/theme';
 import FormContainer from '../form/FormContainer';
-import { errorNotification } from '../../context/Notification';
-import { verifyPasswordResetToken } from '../../api/auth';
+import {
+  errorNotification,
+  successNotificaiton,
+} from '../../context/Notification';
+import { resetUserPassword, verifyPasswordResetToken } from '../../api/auth';
 import { ImSpinner8 } from 'react-icons/im';
 
 export default function ConfirmPassword() {
@@ -28,6 +31,30 @@ export default function ConfirmPassword() {
     const { value, name } = target;
 
     setPassword((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { newPassword, confirmPassword } = password;
+
+    if (newPassword !== confirmPassword)
+      return errorNotification('Password must match!');
+
+    if (!newPassword.trim()) return errorNotification('Password is missing!');
+
+    if (newPassword.trim().length < 8 || newPassword.trim().length > 20)
+      return errorNotification('Password must be between 8 to 20 characters');
+
+    const { error, message } = await resetUserPassword(
+      token,
+      userId,
+      newPassword
+    );
+
+    if (error) return errorNotification(error);
+
+    successNotificaiton(message);
+    navigate('/auth/sign-in', { replace: true });
   };
 
   const isValidToken = useCallback(async () => {
@@ -76,7 +103,7 @@ export default function ConfirmPassword() {
   return (
     <FormContainer>
       <MainContainer className={'flex justify-center'}>
-        <form className={`${commonModalClasses} w-72`}>
+        <form onSubmit={handleSubmit} className={`${commonModalClasses} w-72`}>
           <Title>Enter New Password</Title>
           <FormInput
             label="New Password"

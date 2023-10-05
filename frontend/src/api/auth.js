@@ -98,3 +98,22 @@ export const verifyPasswordResetToken = async (token, userId) => {
     return { error: err.message || err };
   }
 };
+
+export const resetUserPassword = async (token, userId, newPassword) => {
+  try {
+    const { data } = await client.post('/user/reset-password', {
+      token,
+      userId,
+      newPassword,
+    });
+
+    return data;
+  } catch (err) {
+    const { response } = err;
+
+    if (response?.data?.message) return { error: response.data.message };
+    if (response?.data) return response.data;
+
+    return { error: err.message || err };
+  }
+};

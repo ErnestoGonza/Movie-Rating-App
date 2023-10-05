@@ -4,8 +4,6 @@ const PasswordResetToken = require('../models/passwordResetToken');
 const isValidPassResetToken = async (req, res, next) => {
   const { token, userId } = req.body;
 
-  console.log('in backend');
-
   if (!token.trim() || !isValidObjectId(userId))
     return res.status(401).json({ message: 'Token not found!' });
 

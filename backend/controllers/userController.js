@@ -150,11 +150,12 @@ const sendResetPasswordTokenStatus = (req, res) => {
   res.status(200).json({ valid: true });
 };
 
-const resetPassword = async (req, res) => {
+const  resetPassword = async (req, res) => {
   const { newPassword, userId } = req.body;
 
   const user = await User.findById(userId);
   const matched = await user.comparePassword(newPassword);
+
   if (matched)
     return res.status(409).json({
       error: 'New password must be different from the old password.',
