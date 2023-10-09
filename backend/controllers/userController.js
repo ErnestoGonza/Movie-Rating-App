@@ -23,15 +23,23 @@ const create = async (req, res) => {
       .json({ error: 'A token has already been sent to your email!' });
 
   /**
-   * Takes in a user and creates a verification token in DB and sends Email with verificaiton token.
+   * Takes in a user and sends Email with verificaiton token. returns OTP code
    */
-  sendTokenByEmail(newUser);
+  const OTP = await sendTokenByEmail(newUser);
+
+  const newEmailVerificationToken = new EmailVerificationToken({
+    owner: newUser._id,
+    token: OTP,
+  });
+  await newEmailVerificationToken.save();
 
   res.status(201).json({
     user: {
       id: newUser._id,
       name: newUser.name,
       email: newUser.email,
+      token: newUser.token,
+      isVerified: newUser.isVerfied,
     },
   });
 };
@@ -75,12 +83,12 @@ const verifyEmail = async (req, res) => {
     console.log('Message sent: ', info.messageId);
   });
 
-  const { _id, name, email } = user;
+  const { _id, name, email, isVerified } = user;
 
   const jwtToken = jwt.sign({ userId: _id }, process.env.JWT_SECRET);
 
   res.status(200).json({
-    user: { _id, name, email, token: jwtToken },
+    user: { _id, name, email, token: jwtToken, isVerified },
     message: 'Your email is verified!',
   });
 };
@@ -99,9 +107,15 @@ const resendEmailVerificationToken = async (req, res) => {
   });
 
   /**
-   * Takes in a user and creates a verification token in DB and sends Email with verificaiton token.
+   * Takes in a user and sends Email with verificaiton token. returns OTP code
    */
-  sendTokenByEmail(user);
+  const OTP = await sendTokenByEmail(user);
+
+  const newEmailVerificationToken = new EmailVerificationToken({
+    owner: user._id,
+    token: OTP,
+  });
+  await newEmailVerificationToken.save();
 
   res.status(201).json({
     message: 'We have resent your Authenticaiton token to your email address.',
@@ -150,7 +164,7 @@ const sendResetPasswordTokenStatus = (req, res) => {
   res.status(200).json({ valid: true });
 };
 
-const  resetPassword = async (req, res) => {
+const resetPassword = async (req, res) => {
   const { newPassword, userId } = req.body;
 
   const user = await User.findById(userId);
@@ -194,11 +208,13 @@ const signIn = async (req, res) => {
   if (!matched)
     return res.status(401).json({ error: 'Email/Password mismatch!' });
 
-  const { _id, name } = user;
+  const { _id, name, isVerified } = user;
 
   const jwtToken = jwt.sign({ userId: _id }, process.env.JWT_SECRET);
 
-  res.status(200).json({ user: { id: _id, name, email, token: jwtToken } });
+  res
+    .status(200)
+    .json({ user: { id: _id, name, email, token: jwtToken, isVerified } });
 };
 
 module.exports = {

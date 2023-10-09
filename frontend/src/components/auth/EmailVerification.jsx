@@ -5,7 +5,7 @@ import Title from '../form/Title';
 import Submit from '../form/Submit';
 import { commonModalClasses } from '../../utils/theme';
 import FormContainer from '../form/FormContainer';
-import { verifyUserEmail } from '../../api/auth';
+import { resendEmailVerificationToken, verifyUserEmail } from '../../api/auth';
 import {
   errorNotification,
   successNotificaiton,
@@ -31,6 +31,7 @@ export default function EmailVerification() {
   const navigate = useNavigate();
   const { isAuth, authInfo } = useAuth();
   const { isLoggedIn } = authInfo;
+  const isVerified = authInfo.profile?.isVerified;
 
   const { state } = useLocation();
   const user = state?.user;
@@ -41,9 +42,9 @@ export default function EmailVerification() {
 
   useEffect(() => {
     if (!user) navigate('/not-found');
-    if (isLoggedIn) navigate('/');
-  }, [user, isLoggedIn, navigate]);
-
+    if (isVerified && isLoggedIn) navigate('/');
+  }, [user, isVerified, isLoggedIn, navigate]);
+ 
   const handleInputChange = (event, index) => {
     const value = event.target.value;
     const newOtp = [...otp];
@@ -54,6 +55,14 @@ export default function EmailVerification() {
       // Move focus to the next input
       inputRefs.current[index + 1].focus();
     }
+  };
+
+  const handleOTPResend = async () => {
+    const { error, message } = await resendEmailVerificationToken(user.id);
+
+    if (error) return errorNotification(error);
+
+    successNotificaiton(message);
   };
 
   const handleKeyDown = ({ key }, index) => {
@@ -122,7 +131,19 @@ export default function EmailVerification() {
               );
             })}
           </div>
-          <Submit value={'Verify Account'} />
+          <div className="flex flex-col justify-center text-center">
+            <Submit value={'Verify Account'} />
+            <div>
+              <button
+                type="button"
+                onClick={handleOTPResend}
+                className="group relative dark:text-white text-primary font-semibold py-2 px-4 rounded text-l transition-transform mt-2"
+              >
+                I don't have 6-digit code
+                <span className="absolute left-0 bottom-0 w-full h-0.5 bg-logo transform scale-x-0 transition-transform group-hover:scale-x-100"></span>
+              </button>
+            </div>
+          </div>
         </form>
       </MainContainer>
     </FormContainer>

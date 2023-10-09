@@ -8,11 +8,13 @@ import ConfirmPassword from './components/auth/ConfirmPassword';
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/user/Home';
 import NotFound from './components/NotFound';
+import NotVerified from './components/user/NotVerified';
 
 function App() {
   return (
     <>
       <Navbar />
+      <NotVerified />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth/sign-in" element={<SignIn />} />

@@ -117,3 +117,20 @@ export const resetUserPassword = async (token, userId, newPassword) => {
     return { error: err.message || err };
   }
 };
+
+export const resendEmailVerificationToken = async (userId) => {
+  try {
+    const { data } = await client.post('/user/resend-email-verification', {
+      userId,
+    });
+
+    return data;
+  } catch (err) {
+    const { response } = err;
+
+    if (response?.data?.message) return { error: response.data.message };
+    if (response?.data) return response.data;
+
+    return { error: err.message || err };
+  }
+};

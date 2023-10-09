@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-const EmailVerificationToken = require('../models/emailVerificationToken');
 
 const generateOTP = (otpLength = 6) => {
   let OTP = '';
@@ -22,12 +21,6 @@ const sendTokenByEmail = async (user) => {
   //Generate OTP
   const OTP = generateOTP(6);
 
-  const newEmailVerificationToken = new EmailVerificationToken({
-    owner: user._id,
-    token: OTP,
-  });
-  await newEmailVerificationToken.save();
-
   const mailOtions = {
     from: 'verification@reviewapp.com',
     to: user.email,
@@ -43,6 +36,8 @@ const sendTokenByEmail = async (user) => {
 
     console.log('Message sent: ', info.messageId);
   });
+
+  return OTP;
 };
 
 module.exports = {
