@@ -3,6 +3,7 @@ const Actor = require('../models/actorSchema');
 const {
   uploadImageToCloud,
   destroyImageFromCloud,
+  formatActor,
 } = require('../utils/helper');
 const cloudinary = require('cloudinary').v2;
 
@@ -25,13 +26,7 @@ exports.createActor = async (req, res) => {
   }
   await newActor.save();
 
-  res.status(201).json({
-    id: newActor._id,
-    name,
-    about,
-    gender,
-    avatar: newActor.avatar?.url,
-  });
+  res.status(201).json(formatActor(newActor));
 };
 
 exports.updateActor = async (req, res) => {
@@ -68,13 +63,7 @@ exports.updateActor = async (req, res) => {
 
   await actor.save();
 
-  res.status(201).json({
-    id: actor._id,
-    name,
-    about,
-    gender,
-    avatar: actor.avatar?.url,
-  });
+  res.status(201).json(formatActor(actor));
 };
 
 exports.removeActor = async (req, res) => {
@@ -106,13 +95,17 @@ exports.searchActor = async (req, res) => {
 
   const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
 
-  res.json(result);
+  const actors = result.map((actor) => formatActor(actor));
+
+  res.json(actors);
 };
 
 exports.getLatestActors = async (req, res) => {
   const result = await Actor.find({}).sort({ createdAt: '-1' }).limit(12);
 
-  res.status(200).json(result);
+  const actors = result.map((actor) => formatActor(actor));
+
+  res.status(200).json(actors);
 };
 
 exports.getSingleActor = async (req, res) => {
@@ -123,7 +116,7 @@ exports.getSingleActor = async (req, res) => {
   const actor = await Actor.findById(id);
   if (!actor) res.status(404).json({ message: 'Could not retrieve actor!' });
 
-  res.status(200).json(actor);
+  res.status(200).json(formatActor(actor));
 };
 
 /** 

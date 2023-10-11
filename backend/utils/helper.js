@@ -39,8 +39,21 @@ const destroyImageFromCloud = async (public_id) => {
   return result;
 };
 
+const formatActor = (actor) => {
+  const { name, gender, about, _id, avatar } = actor;
+
+  return {
+    id: _id,
+    name,
+    about,
+    gender,
+    avatar: avatar?.url,
+  };
+};
+
 module.exports = {
   generateRandomByte,
   uploadImageToCloud,
   destroyImageFromCloud,
+  formatActor,
 };
