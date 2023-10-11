@@ -9,10 +9,13 @@ const {
 } = require('../controllers/actorController');
 const { uploadImage } = require('../middleware/multer');
 const { actorInfoValidator, validate } = require('../middleware/validator');
+const { isAuth, isAdmin } = require('../middleware/auth');
 const router = express.Router();
 
 router.post(
   '/create',
+  isAuth,
+  isAdmin,
   uploadImage.single('avatar'),
   actorInfoValidator,
   validate,
@@ -20,16 +23,18 @@ router.post(
 );
 router.post(
   '/update/:id',
+  isAuth,
+  isAdmin,
   uploadImage.single('avatar'),
   actorInfoValidator,
   validate,
   updateActor
 );
 
-router.delete('/:id', removeActor);
+router.delete('/:id', isAuth, isAdmin, removeActor);
 
-router.get('/search', searchActor);
-router.get('/latest-uploads', getLatestActors);
+router.get('/search', isAuth, isAdmin, searchActor);
+router.get('/latest-uploads', isAuth, isAdmin, getLatestActors);
 router.get('/single/:id', getSingleActor);
 
 module.exports = router;

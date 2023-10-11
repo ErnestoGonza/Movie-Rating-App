@@ -3,6 +3,7 @@ const User = require('../models/userSchema');
 
 exports.isAuth = async (req, res, next) => {
   const token = req.headers?.authorization;
+  if(!token) return res.status(401).json({ error: 'No authorization token!' })
 
   const jwtToken = token.split('Bearer ')[1];
 
