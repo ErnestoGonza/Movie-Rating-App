@@ -17,7 +17,7 @@ const actorSchema = mongoose.Schema(
       trim: true,
       required: true,
     },
-    name: {
+    avatar: {
       type: Object,
       url: String,
       public_id: String,
@@ -25,5 +25,7 @@ const actorSchema = mongoose.Schema(
   },
   { timestamps: true }
 );
+
+actorSchema.index({ name: 'text' });
 
 module.exports = mongoose.model('Actor', actorSchema);
