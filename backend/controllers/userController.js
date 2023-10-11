@@ -208,13 +208,15 @@ const signIn = async (req, res) => {
   if (!matched)
     return res.status(401).json({ error: 'Email/Password mismatch!' });
 
-  const { _id, name, isVerified } = user;
+  const { _id, name, isVerified, role } = user;
 
   const jwtToken = jwt.sign({ userId: _id }, process.env.JWT_SECRET);
 
   res
     .status(200)
-    .json({ user: { id: _id, name, email, token: jwtToken, isVerified } });
+    .json({
+      user: { id: _id, name, email, role, token: jwtToken, isVerified },
+    });
 };
 
 module.exports = {

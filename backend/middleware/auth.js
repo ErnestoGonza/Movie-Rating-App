@@ -15,3 +15,12 @@ exports.isAuth = async (req, res, next) => {
   req.user = user;
   next();
 };
+
+exports.isAdmin = async (req, res, next) => {
+  const { user } = req;
+
+  if (user.role !== 'admin')
+    return res.status(401).json({ error: 'Unauthorized access!' });
+
+  next();
+};
