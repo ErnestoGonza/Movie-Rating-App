@@ -19,15 +19,25 @@ const generateRandomByte = () => {
   });
 };
 
-const uploadImageToCloud = async (file) => {
+//------------Cloudinary-START-----------------------------------------------------
+
+const uploadFileToCloud = async (file, format) => {
+  const image = {
+    gravity: 'face',
+    height: 500,
+    width: 500,
+    crop: 'thumb',
+  };
+
+  const video = {
+    resource_type: 'video',
+  };
+
+  const options = format === 'video' ? video : image;
+
   const { secure_url, public_id } = await cloudinary.uploader.upload(
     file.path,
-    {
-      gravity: 'face',
-      height: 500,
-      width: 500,
-      crop: 'thumb',
-    }
+    options
   );
 
   return { url: secure_url, public_id };
@@ -38,6 +48,8 @@ const destroyImageFromCloud = async (public_id) => {
 
   return result;
 };
+
+//------------Cloudinary-END--------------------------------------------------
 
 const formatActor = (actor) => {
   const { name, gender, about, _id, avatar } = actor;
@@ -53,7 +65,7 @@ const formatActor = (actor) => {
 
 module.exports = {
   generateRandomByte,
-  uploadImageToCloud,
+  uploadFileToCloud,
   destroyImageFromCloud,
   formatActor,
 };

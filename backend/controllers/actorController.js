@@ -1,7 +1,7 @@
 const { isValidObjectId } = require('mongoose');
 const Actor = require('../models/actorSchema');
 const {
-  uploadImageToCloud,
+  uploadFileToCloud,
   destroyImageFromCloud,
   formatActor,
 } = require('../utils/helper');
@@ -21,7 +21,7 @@ exports.createActor = async (req, res) => {
   const newActor = new Actor({ name, about, gender });
 
   if (file) {
-    const newAvatar = await uploadImageToCloud(file);
+    const newAvatar = await uploadFileToCloud(file);
     newActor.avatar = { ...newAvatar };
   }
   await newActor.save();
@@ -51,7 +51,7 @@ exports.updateActor = async (req, res) => {
   }
 
   if (file) {
-    const newAvatar = await uploadImageToCloud(file);
+    const newAvatar = await uploadFileToCloud(file);
 
     console.log(newAvatar);
 

@@ -5,6 +5,7 @@ require('./db');
 require('express-async-errors');
 const userRoutes = require('./routes/userRoutes');
 const actorRoutes = require('./routes/actorRoutes');
+const movieRoutes = require('./routes/movieRoutes');
 const { errorHandler } = require('./middleware/errorHandler');
 
 //Creates server
@@ -18,6 +19,7 @@ app.use(cors());
 
 app.use('/api/user', userRoutes);
 app.use('/api/actor', actorRoutes);
+app.use('/api/movie', movieRoutes);
 
 app.use('/*', (req, res) => {
   res.status(404).json({ error: 'Not found' });
