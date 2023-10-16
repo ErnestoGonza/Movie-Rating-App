@@ -22,6 +22,7 @@ exports.createActor = async (req, res) => {
 
   if (file) {
     const newAvatar = await uploadFileToCloud(file);
+    //May need to specify what will be passed into avatar but it seems to be working
     newActor.avatar = { ...newAvatar };
   }
   await newActor.save();
@@ -52,8 +53,6 @@ exports.updateActor = async (req, res) => {
 
   if (file) {
     const newAvatar = await uploadFileToCloud(file);
-
-    console.log(newAvatar);
 
     actor.avatar = { ...newAvatar };
   }

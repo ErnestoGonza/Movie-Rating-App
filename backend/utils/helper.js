@@ -21,26 +21,40 @@ const generateRandomByte = () => {
 
 //------------Cloudinary-START-----------------------------------------------------
 
-const uploadFileToCloud = async (file, format) => {
-  const image = {
-    gravity: 'face',
-    height: 500,
-    width: 500,
-    crop: 'thumb',
+const uploadFileToCloud = async (file, fileType = 'image') => {
+  const options = {
+    image: {
+      gravity: 'face',
+      height: 500,
+      width: 500,
+      crop: 'thumb',
+    },
+    video: {
+      resource_type: 'video',
+    },
+    poster: {
+      transformation: {
+        width: 1280,
+        height: 720,
+      },
+      responsive_breakpoints: {
+        create_derived: true,
+        max_width: 640,
+        max_images: 3,
+      },
+    },
   };
 
-  const video = {
-    resource_type: 'video',
-  };
-
-  const options = format === 'video' ? video : image;
-
-  const { secure_url, public_id } = await cloudinary.uploader.upload(
+  const cloudRes = await cloudinary.uploader.upload(
     file.path,
-    options
+    options[fileType]
   );
 
-  return { url: secure_url, public_id };
+  return {
+    url: cloudRes.secure_url,
+    public_id: cloudRes.public_id,
+    responsive_breakpoints: cloudRes?.responsive_breakpoints,
+  };
 };
 
 const destroyImageFromCloud = async (public_id) => {
@@ -63,9 +77,22 @@ const formatActor = (actor) => {
   };
 };
 
+const parseData = (req, res, next) => {
+  const { trailer, cast, genres, tags, writers } = req.body;
+
+  if (trailer) req.body.trailer = JSON.parse(trailer);
+  if (cast) req.body.cast = JSON.parse(cast);
+  if (genres) req.body.genres = JSON.parse(genres);
+  if (tags) req.body.tags = JSON.parse(tags);
+  if (writers) req.body.writers = JSON.parse(writers);
+
+  next();
+};
+
 module.exports = {
   generateRandomByte,
   uploadFileToCloud,
   destroyImageFromCloud,
   formatActor,
+  parseData,
 };

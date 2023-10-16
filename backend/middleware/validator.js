@@ -43,10 +43,12 @@ exports.validateMovie = [
     .isEmpty()
     .withMessage('Story line is missing!'),
   check('language').trim().not().isEmpty().withMessage('language is missing!'),
-  check('releaseDate').isDate().withMessage('Release date is missing!'),
+  check('releaseDate')
+    .isDate()
+    .withMessage('Release date is missing!'),
   check('status')
     .isIn(['public', 'private'])
-    .withMessage('Movie title is missing!'),
+    .withMessage('Movie status is missing!'),
   check('type').trim().not().isEmpty().withMessage('Movie type is missing!'),
   check('genres')
     .isArray()
@@ -73,7 +75,8 @@ exports.validateMovie = [
     .withMessage('Cast must be an array of objects!')
     .custom((cast) => {
       for (let c of cast) {
-        if (!isValidObjectId(c.id)) throw Error('Invalid cast id inside cast!');
+        if (!isValidObjectId(c.actor))
+          throw Error('Invalid cast id inside cast!');
         if (!c.roleAs?.trim()) throw Error('Role is missing inside cast!');
         if (typeof c.leadActor !== 'boolean')
           throw Error('Role is missing inside cast!');

@@ -22,7 +22,7 @@ const movieSchema = mongoose.Schema(
       required: true,
     },
     status: {
-      type: Date,
+      type: String,
       required: true,
       enum: ['public', 'private'],
     },
@@ -59,6 +59,7 @@ const movieSchema = mongoose.Schema(
       type: Object,
       url: { type: String, required: true },
       public_id: { type: String, required: true },
+      responsive: [URL],
       required: true,
     },
     trailer: {
