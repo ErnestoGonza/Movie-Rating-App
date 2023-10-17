@@ -57,8 +57,8 @@ const uploadFileToCloud = async (file, fileType = 'image') => {
   };
 };
 
-const destroyImageFromCloud = async (public_id) => {
-  const result = await cloudinary.uploader.destroy(public_id);
+const destroyImageFromCloud = async (public_id, options = {}) => {
+  const result = await cloudinary.uploader.destroy(public_id, options);
 
   return result;
 };

@@ -43,9 +43,7 @@ exports.validateMovie = [
     .isEmpty()
     .withMessage('Story line is missing!'),
   check('language').trim().not().isEmpty().withMessage('language is missing!'),
-  check('releaseDate')
-    .isDate()
-    .withMessage('Release date is missing!'),
+  check('releaseDate').not().isDate().withMessage('Release date is missing!'),
   check('status')
     .isIn(['public', 'private'])
     .withMessage('Movie status is missing!'),
@@ -84,7 +82,7 @@ exports.validateMovie = [
 
       return true;
     }),
-  check('trailerInfo')
+  check('trailer')
     .isObject()
     .withMessage('trailerInfo must be an object with url and public_id')
     .custom(({ url, public_id }) => {
@@ -103,11 +101,11 @@ exports.validateMovie = [
 
       return true;
     }),
-  check('poster').custom((_, { req }) => {
-    if (!req.file) throw Error('Poster is missing!');
+  // check('poster').custom((_, { req }) => {
+  //   if (!req.file) throw Error('Poster is missing!');
 
-    return true;
-  }),
+  //   return true;
+  // }),
 ];
 
 exports.validate = (req, res, next) => {
