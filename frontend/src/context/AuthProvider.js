@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState, useCallback } from 'react';
 import { getIsAuth, userSignIn } from '../api/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
@@ -12,6 +13,7 @@ const defaultAuthInfo = {
 
 export default function AuthProvider({ children }) {
   const [authInfo, setAuthInfo] = useState({ ...defaultAuthInfo });
+  const navigate = useNavigate();
 
   const handleLogin = async (email, password) => {
     setAuthInfo({ ...authInfo, isPending: true });
@@ -19,6 +21,7 @@ export default function AuthProvider({ children }) {
 
     if (error) return setAuthInfo({ ...authInfo, isPending: false, error });
 
+    navigate('/', { replace: true });
     setAuthInfo({
       profile: { ...user },
       isPending: false,

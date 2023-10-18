@@ -9,8 +9,15 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './components/user/Home';
 import NotFound from './components/NotFound';
 import NotVerified from './components/user/NotVerified';
+import { useAuth } from './hooks';
+import AdminNavigator from './navigator/AdminNavigator';
 
 function App() {
+  const { authInfo } = useAuth();
+  const isAdmin = authInfo.profile?.role === 'admin';
+
+  if (isAdmin) return <AdminNavigator />;
+
   return (
     <>
       <Navbar />

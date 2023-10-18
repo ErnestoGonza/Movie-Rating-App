@@ -83,12 +83,12 @@ const verifyEmail = async (req, res) => {
     console.log('Message sent: ', info.messageId);
   });
 
-  const { _id, name, email, isVerified } = user;
+  const { _id, name, email, isVerified, role } = user;
 
   const jwtToken = jwt.sign({ userId: _id }, process.env.JWT_SECRET);
 
   res.status(200).json({
-    user: { _id, name, email, token: jwtToken, isVerified },
+    user: { _id, name, email, token: jwtToken, isVerified, role },
     message: 'Your email is verified!',
   });
 };

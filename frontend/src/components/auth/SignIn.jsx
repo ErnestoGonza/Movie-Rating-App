@@ -8,7 +8,6 @@ import FormContainer from '../form/FormContainer';
 import { CustomLink } from '../form/CustomLink';
 import { errorNotification } from '../../context/Notification';
 import { useAuth } from '../../hooks';
-import { useNavigate } from 'react-router-dom';
 import { validateEmail, isValidPassword } from '../../utils/helper';
 
 export default function SignIn() {
@@ -17,9 +16,8 @@ export default function SignIn() {
     password: '',
   });
 
-  const navigate = useNavigate();
   const { handleLogin, authInfo } = useAuth();
-  const { isPending, isLoggedIn } = authInfo;
+  const { isPending } = authInfo;
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
@@ -54,10 +52,6 @@ export default function SignIn() {
 
     await handleLogin(userInfo.email, userInfo.password);
   };
-
-  useEffect(() => {
-    if (isLoggedIn) navigate('/');
-  }, [isLoggedIn, navigate]);
 
   useEffect(() => {
     if (authInfo.error) errorNotification(authInfo.error);
